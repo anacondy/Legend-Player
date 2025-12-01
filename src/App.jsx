@@ -5,6 +5,8 @@ import {
   Code, Volume2, VolumeX, Maximize2, Minimize2, 
   Box, Cpu, FileDigit, FileCode, Database, Type
 } from 'lucide-react';
+import JSZip from 'jszip';
+import './performance.css';
 
 // V5.0: Complete Custom Player, Adaptive Aspect Ratios, Full Keyboard Suite
 
@@ -32,22 +34,13 @@ const LegendBatchSuite = () => {
   const [targetFormat, setTargetFormat] = useState('png'); 
   const [quality, setQuality] = useState(90);
 
-  const [jsZipLoaded, setJsZipLoaded] = useState(false);
   const [bootSequence, setBootSequence] = useState(true);
 
   // Refs for keyboard handling
   const playerContainerRef = useRef(null);
 
-  // Load Dependencies
+  // Boot sequence
   useEffect(() => {
-    if (!window.JSZip) {
-      const script = document.createElement('script');
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
-      script.onload = () => setJsZipLoaded(true);
-      document.head.appendChild(script);
-    } else {
-      setJsZipLoaded(true);
-    }
     setTimeout(() => setBootSequence(false), 1000);
   }, []);
 
@@ -189,12 +182,12 @@ const LegendBatchSuite = () => {
   };
 
   const processBatch = async () => {
-    if (!jsZipLoaded || files.length === 0) return;
+    if (files.length === 0) return;
     setIsProcessing(true);
     setProgress(0);
     setCompleted(false);
 
-    const zip = new window.JSZip();
+    const zip = new JSZip();
     const total = files.length;
 
     try {
@@ -226,7 +219,8 @@ const LegendBatchSuite = () => {
       document.body.removeChild(link);
       setCompleted(true);
     } catch (err) {
-      alert("Processing failed.");
+      console.error("Processing error:", err);
+      alert(`Processing failed: ${err.message || 'Unknown error'}. Please try again with fewer files or check the browser console for details.`);
     } finally {
       setIsProcessing(false);
     }
@@ -499,18 +493,33 @@ const LegendBatchSuite = () => {
         }
     }, [file]);
 
+    // Note: Sandbox mode loads React/Babel from CDN for code execution preview
+    // This is intentional for the sandbox feature but runs in isolated iframe
     const generateSandboxSrc = (code) => `
         <!DOCTYPE html><html><head>
-        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
         <style>body { font-family: sans-serif; color: #333; padding: 20px; }</style>
-        </head><body><div id="root"></div><script type="text/babel">${code}</script></body></html>
+        </head><body><div id="root"></div><script type="text/babel">${code}<\/script></body></html>
     `;
 
     if (sandboxEnabled && (file.type === 'code')) {
          const src = generateSandboxSrc(content);
-         return <iframe srcDoc={src} className="w-full h-full border-none bg-white" title="sandbox" />;
+         // Iframe sandbox attribute restricts capabilities for security
+         return (
+           <div className="w-full h-full relative">
+             <div className="absolute top-0 left-0 right-0 bg-yellow-100 border-b-2 border-yellow-500 px-4 py-2 text-xs font-mono z-10">
+               ⚠️ SANDBOX MODE: Only run code from trusted sources. This code executes in an isolated environment.
+             </div>
+             <iframe 
+               srcDoc={src} 
+               sandbox="allow-scripts" 
+               className="w-full h-full border-none bg-white pt-10" 
+               title="sandbox" 
+             />
+           </div>
+         );
     }
 
     return (

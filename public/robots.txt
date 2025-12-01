@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anacondy.github.io/Legend-Player/sitemap.xml

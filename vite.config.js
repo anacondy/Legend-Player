@@ -11,6 +11,7 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
+        // Keep error and warn logs for production debugging
         drop_console: ['log', 'info'],
         drop_debugger: true
       }

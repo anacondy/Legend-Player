@@ -34,7 +34,6 @@ const LegendBatchSuite = () => {
   const [targetFormat, setTargetFormat] = useState('png'); 
   const [quality, setQuality] = useState(90);
 
-  const [jsZipLoaded, setJsZipLoaded] = useState(true); // JSZip now bundled
   const [bootSequence, setBootSequence] = useState(true);
 
   // Refs for keyboard handling
@@ -183,7 +182,7 @@ const LegendBatchSuite = () => {
   };
 
   const processBatch = async () => {
-    if (!jsZipLoaded || files.length === 0) return;
+    if (files.length === 0) return;
     setIsProcessing(true);
     setProgress(0);
     setCompleted(false);
@@ -494,6 +493,8 @@ const LegendBatchSuite = () => {
         }
     }, [file]);
 
+    // Note: Sandbox mode loads React/Babel from CDN for code execution preview
+    // This is intentional for the sandbox feature but runs in isolated iframe
     const generateSandboxSrc = (code) => `
         <!DOCTYPE html><html><head>
         <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
@@ -505,7 +506,7 @@ const LegendBatchSuite = () => {
 
     if (sandboxEnabled && (file.type === 'code')) {
          const src = generateSandboxSrc(content);
-         // Sandbox attribute restricts iframe capabilities for security
+         // Iframe sandbox attribute restricts capabilities for security
          return (
            <div className="w-full h-full relative">
              <div className="absolute top-0 left-0 right-0 bg-yellow-100 border-b-2 border-yellow-500 px-4 py-2 text-xs font-mono z-10">

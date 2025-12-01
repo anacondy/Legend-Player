@@ -5,6 +5,7 @@ import {
   Code, Volume2, VolumeX, Maximize2, Minimize2, 
   Box, Cpu, FileDigit, FileCode, Database, Type
 } from 'lucide-react';
+import './performance.css';
 
 // V5.0: Complete Custom Player, Adaptive Aspect Ratios, Full Keyboard Suite
 

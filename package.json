@@ -1,0 +1,63 @@
+{
+  "name": "legend-player",
+  "version": "5.0.0",
+  "description": "Legend Batch Suite - Media Player with Batch Processing",
+  "homepage": "https://anacondy.github.io/Legend-Player/",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron-build": "electron-builder",
+    "electron-build-all": "electron-builder --win --mac --linux"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "terser": "^5.44.1",
+    "vite": "^5.0.8"
+  },
+  "main": "electron/main.js",
+  "build": {
+    "appId": "com.anacondy.legend-player",
+    "productName": "Legend Player",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "public/icon.png"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "public/icon.png",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "public/icon.png",
+      "category": "Utility"
+    }
+  }
+}

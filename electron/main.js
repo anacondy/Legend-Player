@@ -16,7 +16,7 @@ function createWindow() {
       allowRunningInsecureContent: false
     },
     backgroundColor: '#1a1a1a',
-    icon: path.join(__dirname, '../public/icon.png'),
+    icon: path.join(__dirname, '../public/icon.svg'),
     titleBarStyle: 'default',
     show: false
   });

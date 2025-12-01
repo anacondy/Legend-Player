@@ -41,14 +41,14 @@
         "nsis",
         "portable"
       ],
-      "icon": "public/icon.png"
+      "icon": "public/icon.svg"
     },
     "mac": {
       "target": [
         "dmg",
         "zip"
       ],
-      "icon": "public/icon.png",
+      "icon": "public/icon.svg",
       "category": "public.app-category.utilities"
     },
     "linux": {
@@ -56,7 +56,7 @@
         "AppImage",
         "deb"
       ],
-      "icon": "public/icon.png",
+      "icon": "public/icon.svg",
       "category": "Utility"
     }
   }
